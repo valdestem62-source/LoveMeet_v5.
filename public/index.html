@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>LoveMeet</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f7fb;margin:0}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px 18px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:0}
+    .logo{font-weight:800;font-size:20px}
+    .wrap{max-width:1080px;margin:0 auto;padding:16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    video{width:100%;background:#000;border-radius:12px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+    button{cursor:pointer;border:0;background:#ef3758;color:#fff;padding:10px 14px;border-radius:10px;font-weight:600}
+    button.secondary{background:#eaeaf0;color:#222}
+    .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+    .chat{border:1px solid #ddd;background:#fff;border-radius:12px;height:280px;padding:10px;overflow:auto}
+    .paybar{display:flex;gap:8px;align-items:center;margin-top:8px}
+    select, input[type=password]{padding:8px 10px;border:1px solid #ddd;border-radius:8px}
+    .status{color:#666}
+    .admin-btn{background:#444}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">❤️ LoveMeet</div>
+  <div class="row">
+    <select id="lang">
+      <option value="ru">Русский</option>
+      <option value="en">English</option>
+    </select>
+    <button id="openAdmin" class="admin-btn">Админ</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <video id="local" autoplay playsinline muted></video>
+    <video id="remote" autoplay playsinline></video>
+  </div>
+
+  <div class="controls">
+    <div class="row">
+      <label><input type="radio" name="gender" value="male" checked> <span data-i18n="male">Я мужчина</span></label>
+      <label><input type="radio" name="gender" value="female"> <span data-i18n="female">Я женщина</span></label>
+    </div>
+
+    <div class="row">
+      <button id="btnCamera" class="secondary" data-i18n="cam_on">Камера вкл</button>
+      <button id="btnMic" class="secondary" data-i18n="mic_on">Микрофон вкл</button>
+      <button id="btnNext" data-i18n="next">Следующий собеседник</button>
+      <button id="btnStart" data-i18n="start">Начать знакомство</button>
+    </div>
+
+    <div class="status" id="status">Готово</div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="chat" id="chat"></div>
+      <div class="row" style="margin-top:8px">
+        <input id="msg" placeholder="Написать сообщение..." style="flex:1;padding:10px;border:1px solid #ddd;border-radius:10px">
+        <button id="send" class="secondary" data-i18n="send">Отправить</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="paybar">
+        <button id="payKaspi" class="secondary">Kaspi</button>
+        <button id="payWM" class="secondary">WebMoney</button>
+        <span id="payInfo" style="color:#666"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Админка (модалка) -->
+<div id="adminModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
+  <div style="width:min(860px,95vw);background:#fff;border-radius:14px;padding:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 style="margin:0">Админ-панель</h3>
+      <button id="closeAdmin" class="secondary">✕</button>
+    </div>
+    <div class="row" style="margin:10px 0">
+      <input id="adminCode" type="password" placeholder="Код администратора" style="flex:1">
+      <button id="loadSettings" class="secondary">Загрузить</button>
+      <button id="saveSettings">Сохранить</button>
+    </div>
+
+    <div class="row" style="gap:12px;margin-bottom:8px">
+      <button class="secondary tab" data-tab="tab-settings">Настройки</button>
+      <button class="secondary tab" data-tab="tab-payments">Платежи</button>
+      <button class="secondary tab" data-tab="tab-users">Пользователи</button>
+    </div>
+
+    <div id="tab-settings" class="tabpane">
+      <div class="row"><label>Бесплатно (мин): <input id="freeMinutes" type="number" min="0" style="width:110px"></label></div>
+      <div class="row"><label>Цена $ за 30 мин: <input id="priceUSDfor30" type="number" step="0.01" min="0" style="width:110px"></label></div>
+      <div class="row"><label>Язык по умолчанию:
+        <select id="langDefault"><option value="ru">Русский</option><option value="en">English</option></select>
+      </label></div>
+      <small>Сохранить — и перезагрузить страницу.</small>
+    </div>
+
+    <div id="tab-payments" class="tabpane" style="display:none">
+      <h4>Kaspi</h4>
+      <div class="row">
+        <label>Включено <input id="kaspiEnabled" type="checkbox"></label>
+        <label>Merchant ID: <input id="kaspiMerchant" style="width:220px"></label>
+        <label>Получатель: <input id="kaspiReceiver" style="width:220px"></label>
+      </div>
+      <h4>WebMoney</h4>
+      <div class="row">
+        <label>Включено <input id="wmEnabled" type="checkbox"></label>
+        <label>Purse: <input id="wmPurse" style="width:220px"></label>
+      </div>
+    </div>
+
+    <div id="tab-users" class="tabpane" style="display:none">
+      <div id="stats"></div>
+      <button id="refreshStats" class="secondary">Обновить</button>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.js"></script>
+</body>
+</html>

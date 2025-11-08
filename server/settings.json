@@ -1,0 +1,22 @@
+{
+  "freeMinutes": 8,
+  "priceUSDfor30": 5,
+  "langDefault": "ru",
+  "payments": {
+    "kaspi": {
+      "enabled": true,
+      "merchantId": "REPLACE_ME",
+      "receiver": "ИП Иванов",
+      "description": "LoveMeet Minutes"
+    },
+    "webmoney": {
+      "enabled": true,
+      "purse": "Z123456789012"
+    },
+    "stripe": {
+      "enabled": false,
+      "publicKey": "",
+      "priceId30": ""
+    }
+  }
+}

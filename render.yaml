@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: LoveMeet_v5
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: ADMIN_CODE
+        value: supersecret123
+      - key: BASE_URL
+        value: "" # можно оставить пустым — Render подставит домен

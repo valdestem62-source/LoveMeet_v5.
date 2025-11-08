@@ -1,0 +1,16 @@
+{
+  "name": "lovemeet",
+  "version": "5.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "socket.io": "^4.7.5"
+  }
+}

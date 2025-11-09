@@ -1,3 +1,9 @@
+const pc = new RTCPeerConnection({
+  iceServers: [
+    { urls: "stun:stun.l.google.com:19302" },
+    { urls: "stun:stun1.l.google.com:19302" },
+  ],
+});
 /* i18n */
 const I18N = {
   ru: {

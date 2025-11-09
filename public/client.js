@@ -1,3 +1,7 @@
+const socket = io({
+  transports: ["websocket"],
+  secure: true,
+});
 const pc = new RTCPeerConnection({
   iceServers: [
     { urls: "stun:stun.l.google.com:19302" },

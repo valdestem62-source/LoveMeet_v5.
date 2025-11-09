@@ -53,9 +53,15 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("next", () => {
-    socket.emit("next");
-  });
+ socket.on("next", () => {
+  const nextUser = users.find(u => u !== socket.id);
+  if (nextUser) {
+    socket.emit("offerRequest", { to: nextUser });
+    socket.to(nextUser).emit("nextPartner", { from: socket.id });
+  } else {
+    socket.emit("waiting");
+  }
+});
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);

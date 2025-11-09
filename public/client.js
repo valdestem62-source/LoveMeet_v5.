@@ -49,7 +49,6 @@ const closeAdmin = qs("#closeAdmin");
 
 let lang = "ru";
 let pc, localStream;
-const socket = io();
 
 let currentRoom = null;
 
